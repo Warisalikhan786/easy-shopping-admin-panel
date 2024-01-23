@@ -1,9 +1,11 @@
 // ignore_for_file: file_names, sort_child_properties_last, prefer_const_constructors, unused_local_variable, must_be_immutable, avoid_print, unnecessary_string_interpolations, deprecated_member_use, unused_element, unnecessary_null_comparison
+import 'package:admin_panel/screens/all-users-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../screens/all-orders-screen.dart';
 import '../screens/main-screen.dart';
 import '../utils/constant.dart';
 
@@ -137,7 +139,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: ListTile(
                 onTap: () {
-                  Get.offAll(() => MainScreen());
+                  Get.to(() => AllUsersScreen());
                 },
                 title: Text(
                   'Users',
@@ -153,7 +155,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: ListTile(
                 onTap: () {
-                  Get.offAll(() => MainScreen());
+                  Get.to(() => AllOrdersScreen());
                 },
                 title: Text(
                   'Orders',
