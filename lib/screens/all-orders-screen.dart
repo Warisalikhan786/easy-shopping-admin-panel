@@ -1,13 +1,10 @@
 // ignore_for_file: file_names, avoid_unnecessary_containers, prefer_const_constructors, avoid_print
 
 import 'package:admin_panel/utils/constant.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../models/user-model.dart';
 import 'specific-customer-orders-screen.dart';
 
 class AllOrdersScreen extends StatelessWidget {
