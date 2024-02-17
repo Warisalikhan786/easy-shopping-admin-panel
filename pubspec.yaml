@@ -49,6 +49,13 @@ dependencies:
   image_card: ^0.0.4
   flutter_swipe_action_cell: ^3.1.2
   url_launcher: ^6.2.1
+  get_storage: ^2.1.1
+  image_picker: ^1.0.2
+  device_info_plus: ^9.1.2
+  intl: ^0.19.0
+  permission_handler: ^10.4.3
+  app_settings: ^5.0.0
+  firebase_storage: ^11.6.0
 
 dev_dependencies:
   flutter_test:
