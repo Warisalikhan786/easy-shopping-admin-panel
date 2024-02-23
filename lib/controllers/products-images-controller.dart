@@ -31,11 +31,17 @@ class AddProductImagesController extends GetxController {
         middleText: "Pick an image from the camera or gallery?",
         actions: [
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+              seletcImages("camera");
+            },
             child: Text('Camera'),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+              seletcImages("gallery");
+            },
             child: Text('Gallery'),
           ),
         ],
@@ -48,6 +54,32 @@ class AddProductImagesController extends GetxController {
     if (status == PermissionStatus.permanentlyDenied) {
       print("Error please allow permission for further usage");
       openAppSettings();
+    }
+  }
+
+  Future<void> seletcImages(String type) async {
+    List<XFile> imgs = [];
+    if (type == 'gallery') {
+      try {
+        imgs = await _picker.pickMultiImage(imageQuality: 80);
+        update();
+      } catch (e) {
+        print('Error $e');
+      }
+    } else {
+      final img =
+          await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+
+      if (img != null) {
+        imgs.add(img);
+        update();
+      }
+    }
+
+    if (imgs.isNotEmpty) {
+      selectedIamges.addAll(imgs);
+      update();
+      print(selectedIamges.length);
     }
   }
 }
