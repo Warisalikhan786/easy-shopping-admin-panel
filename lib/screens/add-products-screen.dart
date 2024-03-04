@@ -1,17 +1,23 @@
-// ignore_for_file: file_names, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, prefer_const_constructors, must_be_immutable, sized_box_for_whitespace, prefer_is_empty, avoid_print
+// ignore_for_file: file_names, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers, prefer_const_constructors, must_be_immutable, sized_box_for_whitespace, prefer_is_empty, avoid_print, await_only_futures
 
 import 'dart:io';
 
 import 'package:admin_panel/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/category-dropdown_controller.dart';
 import '../controllers/products-images-controller.dart';
+import '../widgets/dropdown-categories-widget.dart';
 
 class AddProductScreen extends StatelessWidget {
   AddProductScreen({super.key});
 
   AddProductImagesController addProductImagesController =
       Get.put(AddProductImagesController());
+
+  //
+  CategoryDropDownController categoryDropDownController =
+      Get.put(CategoryDropDownController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +27,8 @@ class AddProductScreen extends StatelessWidget {
         backgroundColor: AppConstant.appMainColor,
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Container(
-          height: Get.height,
           child: Column(
             children: [
               Padding(
@@ -95,6 +101,9 @@ class AddProductScreen extends StatelessWidget {
                       : SizedBox.shrink();
                 },
               ),
+
+              //show categories drop down
+              DropDownCategoriesWiidget(),
             ],
           ),
         ),
