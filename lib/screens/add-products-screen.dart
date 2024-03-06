@@ -2,11 +2,16 @@
 
 import 'dart:io';
 
+import 'package:admin_panel/models/product-model.dart';
 import 'package:admin_panel/utils/constant.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import '../controllers/category-dropdown_controller.dart';
+import '../controllers/is-sale-controller.dart';
 import '../controllers/products-images-controller.dart';
+import '../services/generate-ids-service.dart';
 import '../widgets/dropdown-categories-widget.dart';
 
 class AddProductScreen extends StatelessWidget {
@@ -18,6 +23,14 @@ class AddProductScreen extends StatelessWidget {
   //
   CategoryDropDownController categoryDropDownController =
       Get.put(CategoryDropDownController());
+
+  IsSaleController isSaleController = Get.put(IsSaleController());
+
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController salePriceController = TextEditingController();
+  TextEditingController fullPriceController = TextEditingController();
+  TextEditingController deliveryTimeController = TextEditingController();
+  TextEditingController productDescriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +117,32 @@ class AddProductScreen extends StatelessWidget {
 
               //show categories drop down
               DropDownCategoriesWiidget(),
+
+              //isSale
+              GetBuilder<IsSaleController>(
+                init: IsSaleController(),
+                builder: (isSaleController) {
+                  return Card(
+                    elevation: 10,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Is Sale"),
+                          Switch(
+                            value: isSaleController.isSale.value,
+                            activeColor: AppConstant.appMainColor,
+                            onChanged: (value) {
+                              isSaleController.toggleIsSale(value);
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
