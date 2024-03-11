@@ -143,6 +143,133 @@ class AddProductScreen extends StatelessWidget {
                   );
                 },
               ),
+              //form
+              SizedBox(height: 10.0),
+              Container(
+                height: 65,
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                child: TextFormField(
+                  cursorColor: AppConstant.appMainColor,
+                  textInputAction: TextInputAction.next,
+                  controller: productNameController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    hintText: "Product Name",
+                    hintStyle: TextStyle(fontSize: 12.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.0),
+
+              Obx(() {
+                return isSaleController.isSale.value
+                    ? Container(
+                        height: 65,
+                        margin: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: TextFormField(
+                          cursorColor: AppConstant.appMainColor,
+                          textInputAction: TextInputAction.next,
+                          controller: salePriceController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                            ),
+                            hintText: "Sale Price",
+                            hintStyle: TextStyle(fontSize: 12.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink();
+              }),
+
+              SizedBox(height: 10.0),
+              Container(
+                height: 65,
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                child: TextFormField(
+                  cursorColor: AppConstant.appMainColor,
+                  textInputAction: TextInputAction.next,
+                  controller: fullPriceController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    hintText: "Full Price",
+                    hintStyle: TextStyle(fontSize: 12.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 10.0),
+              Container(
+                height: 65,
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                child: TextFormField(
+                  cursorColor: AppConstant.appMainColor,
+                  textInputAction: TextInputAction.next,
+                  controller: deliveryTimeController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    hintText: "Delivery Time",
+                    hintStyle: TextStyle(fontSize: 12.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 10.0),
+              Container(
+                height: 65,
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                child: TextFormField(
+                  cursorColor: AppConstant.appMainColor,
+                  textInputAction: TextInputAction.next,
+                  controller: productDescriptionController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    hintText: "Product Desc",
+                    hintStyle: TextStyle(fontSize: 12.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              ElevatedButton(
+                onPressed: () async {
+                  String productId = await GenerateIds().generateProductId();
+                  print(productId);
+                },
+                child: Text("Upload"),
+              )
             ],
           ),
         ),
