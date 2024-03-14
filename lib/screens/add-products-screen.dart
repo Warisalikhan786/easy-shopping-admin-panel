@@ -265,8 +265,17 @@ class AddProductScreen extends StatelessWidget {
 
               ElevatedButton(
                 onPressed: () async {
-                  String productId = await GenerateIds().generateProductId();
-                  print(productId);
+                  // print(productId);
+
+                  try {
+                    EasyLoading.show();
+                    await addProductImagesController.uploadFunction(
+                        addProductImagesController.selectedIamges);
+                    print(addProductImagesController.arrImagesUrl);
+                    EasyLoading.dismiss();
+                  } catch (e) {
+                    print("error : $e");
+                  }
                 },
                 child: Text("Upload"),
               )

@@ -1,4 +1,6 @@
-// ignore_for_file: file_names, unused_field, unused_local_variable, prefer_const_constructors, avoid_print
+// ignore_for_file: file_names, unused_field, unused_local_variable, prefer_const_constructors, avoid_print, no_leading_underscores_for_local_identifiers
+
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -86,5 +88,26 @@ class AddProductImagesController extends GetxController {
   void removeImages(int index) {
     selectedIamges.removeAt(index);
     update();
+  }
+
+  //
+  Future<void> uploadFunction(List<XFile> _images) async {
+    arrImagesUrl.clear();
+    for (int i = 0; i < _images.length; i++) {
+      dynamic imageUrl = await uplaodFile(_images[i]);
+      arrImagesUrl.add(imageUrl.toString());
+    }
+    update();
+  }
+
+  //
+  Future<String> uplaodFile(XFile _image) async {
+    TaskSnapshot reference = await storageRef
+        .ref()
+        .child("product-images")
+        .child(_image.name + DateTime.now().toString())
+        .putFile(File(_image.path));
+
+    return await reference.ref.getDownloadURL();
   }
 }
