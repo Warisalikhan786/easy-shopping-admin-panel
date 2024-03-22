@@ -272,6 +272,34 @@ class AddProductScreen extends StatelessWidget {
                     await addProductImagesController.uploadFunction(
                         addProductImagesController.selectedIamges);
                     print(addProductImagesController.arrImagesUrl);
+
+                    String productId = await GenerateIds().generateProductId();
+
+                    ProductModel productModel = ProductModel(
+                      productId: productId,
+                      categoryId: categoryDropDownController.selectedCategoryId
+                          .toString(),
+                      productName: productNameController.text.trim(),
+                      categoryName: categoryDropDownController
+                          .selectedCategoryName
+                          .toString(),
+                      salePrice: salePriceController.text != ''
+                          ? salePriceController.text.trim()
+                          : '',
+                      fullPrice: fullPriceController.text.trim(),
+                      productImages: addProductImagesController.arrImagesUrl,
+                      deliveryTime: deliveryTimeController.text.trim(),
+                      isSale: isSaleController.isSale.value,
+                      productDescription:
+                          productDescriptionController.text.trim(),
+                      createdAt: DateTime.now(),
+                      updatedAt: DateTime.now(),
+                    );
+
+                    await FirebaseFirestore.instance
+                        .collection('products')
+                        .doc(productId)
+                        .set(productModel.toMap());
                     EasyLoading.dismiss();
                   } catch (e) {
                     print("error : $e");
