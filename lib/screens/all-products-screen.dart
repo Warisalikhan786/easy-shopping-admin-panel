@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
+// ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, avoid_print
 
 import 'package:admin_panel/models/product-model.dart';
 import 'package:admin_panel/utils/constant.dart';
@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'add-products-screen.dart';
+import 'edit-product-screen.dart';
 import 'product-detail-screen.dart';
 
 class AllProductsScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       body: FutureBuilder(
         future: FirebaseFirestore.instance
             .collection('products')
-            .orderBy('createdAt', descending: true)
+            // .orderBy('createdAt', descending: true)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -67,7 +68,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
             return ListView.builder(
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
-              itemCount: snapshot.data!.docs.length,
+              itemCount: 8,
               itemBuilder: (context, index) {
                 final data = snapshot.data!.docs[index];
 
@@ -106,7 +107,12 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     ),
                     title: Text(productModel.productName),
                     subtitle: Text(productModel.productId),
-                    trailing: Icon(Icons.arrow_forward_ios),
+                    trailing: GestureDetector(
+                        onTap: () {
+                          Get.to(() =>
+                              EditProductScreen(productModel: productModel));
+                        },
+                        child: Icon(Icons.edit)),
                   ),
                 );
               },
