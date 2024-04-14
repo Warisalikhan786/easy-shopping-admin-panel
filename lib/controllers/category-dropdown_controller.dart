@@ -74,4 +74,11 @@ class CategoryDropDownController extends GetxController {
     print('selectedCategoryName $selectedCategoryName');
     update();
   }
+
+  // set old value
+  void setOldValue(String? categoryId) {
+    selectedCategoryId = categoryId?.obs;
+    print('selectedCategoryId $selectedCategoryId');
+    update();
+  }
 }

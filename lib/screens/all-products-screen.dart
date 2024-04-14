@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/category-dropdown_controller.dart';
 import 'add-products-screen.dart';
 import 'edit-product-screen.dart';
 import 'product-detail-screen.dart';
@@ -109,6 +110,10 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     subtitle: Text(productModel.productId),
                     trailing: GestureDetector(
                         onTap: () {
+                          final editProdouctCategory =
+                              Get.put(CategoryDropDownController());
+                          editProdouctCategory
+                              .setOldValue(productModel.categoryId);
                           Get.to(() =>
                               EditProductScreen(productModel: productModel));
                         },
