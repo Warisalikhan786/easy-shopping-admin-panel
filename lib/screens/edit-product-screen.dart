@@ -6,19 +6,29 @@ import 'package:admin_panel/controllers/edit-product-controller.dart';
 import 'package:admin_panel/models/product-model.dart';
 import 'package:admin_panel/utils/constant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import '../controllers/category-dropdown_controller.dart';
+import '../controllers/is-sale-controller.dart';
 
 class EditProductScreen extends StatelessWidget {
   ProductModel productModel;
-  EditProductScreen({
-    super.key,
-    required this.productModel,
-  });
+  EditProductScreen({super.key, required this.productModel});
+
+  IsSaleController isSaleController = Get.put(IsSaleController());
+
+  CategoryDropDownController categoryDropDownController =
+      Get.put(CategoryDropDownController());
+
+  TextEditingController productNameController = TextEditingController();
+  TextEditingController salePriceController = TextEditingController();
+  TextEditingController fullPriceController = TextEditingController();
+  TextEditingController deliveryTimeController = TextEditingController();
+  TextEditingController productDescriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +157,223 @@ class EditProductScreen extends StatelessWidget {
                       );
                     },
                   ),
+
+                  //isSale
+                  GetBuilder<IsSaleController>(
+                    init: IsSaleController(),
+                    builder: (isSaleController) {
+                      return Card(
+                        elevation: 10,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Is Sale"),
+                              Switch(
+                                value: isSaleController.isSale.value,
+                                activeColor: AppConstant.appMainColor,
+                                onChanged: (value) {
+                                  isSaleController.toggleIsSale(value);
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  //form
+                  SizedBox(height: 10.0),
+                  Container(
+                    height: 65,
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: TextFormField(
+                      cursorColor: AppConstant.appMainColor,
+                      textInputAction: TextInputAction.next,
+                      controller: productNameController
+                        ..text = productModel.productName,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                        ),
+                        hintText: "Product Name",
+                        hintStyle: TextStyle(fontSize: 12.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  GetBuilder<IsSaleController>(
+                    init: IsSaleController(),
+                    builder: (isSaleController) {
+                      return isSaleController.isSale.value
+                          ? Container(
+                              height: 65,
+                              margin: EdgeInsets.symmetric(horizontal: 10.0),
+                              child: TextFormField(
+                                cursorColor: AppConstant.appMainColor,
+                                textInputAction: TextInputAction.next,
+                                controller: salePriceController
+                                  ..text = productModel.salePrice,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 10.0,
+                                  ),
+                                  hintText: "Sale Price",
+                                  hintStyle: TextStyle(fontSize: 12.0),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink();
+                    },
+                  ),
+
+                  // Obx(() {
+                  //   return isSaleController.isSale.value
+                  //       ? Container(
+                  //           height: 65,
+                  //           margin: EdgeInsets.symmetric(horizontal: 10.0),
+                  //           child: TextFormField(
+                  //             cursorColor: AppConstant.appMainColor,
+                  //             textInputAction: TextInputAction.next,
+                  //             controller: salePriceController
+                  //               ..text = productModel.salePrice,
+                  //             decoration: InputDecoration(
+                  //               contentPadding: EdgeInsets.symmetric(
+                  //                 horizontal: 10.0,
+                  //               ),
+                  //               hintText: "Sale Price",
+                  //               hintStyle: TextStyle(fontSize: 12.0),
+                  //               border: OutlineInputBorder(
+                  //                 borderRadius: BorderRadius.all(
+                  //                   Radius.circular(10.0),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         )
+                  //       : SizedBox.shrink();
+                  // }),
+
+                  SizedBox(height: 10.0),
+                  Container(
+                    height: 65,
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: TextFormField(
+                      cursorColor: AppConstant.appMainColor,
+                      textInputAction: TextInputAction.next,
+                      controller: fullPriceController
+                        ..text = productModel.fullPrice,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                        ),
+                        hintText: "Full Price",
+                        hintStyle: TextStyle(fontSize: 12.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 10.0),
+                  Container(
+                    height: 65,
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: TextFormField(
+                      cursorColor: AppConstant.appMainColor,
+                      textInputAction: TextInputAction.next,
+                      controller: deliveryTimeController
+                        ..text = productModel.deliveryTime,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                        ),
+                        hintText: "Delivery Time",
+                        hintStyle: TextStyle(fontSize: 12.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 10.0),
+                  Container(
+                    height: 65,
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: TextFormField(
+                      cursorColor: AppConstant.appMainColor,
+                      textInputAction: TextInputAction.next,
+                      controller: productDescriptionController
+                        ..text = productModel.productDescription,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10.0,
+                        ),
+                        hintText: "Product Desc",
+                        hintStyle: TextStyle(fontSize: 12.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  ElevatedButton(
+                    onPressed: () async {
+                      //product Model
+
+                      EasyLoading.show();
+                      ProductModel newProductModel = ProductModel(
+                        productId: productModel.productId,
+                        categoryId: categoryDropDownController
+                            .selectedCategoryId
+                            .toString(),
+                        productName: productNameController.text.trim(),
+                        categoryName: categoryDropDownController
+                            .selectedCategoryName
+                            .toString(),
+                        salePrice: salePriceController.text != ''
+                            ? salePriceController.text.trim()
+                            : '',
+                        fullPrice: fullPriceController.text.trim(),
+                        productImages: productModel.productImages,
+                        deliveryTime: deliveryTimeController.text.trim(),
+                        isSale: isSaleController.isSale.value,
+                        productDescription:
+                            productDescriptionController.text.trim(),
+                        createdAt: productModel.createdAt,
+                        updatedAt: DateTime.now(),
+                      );
+
+                      await FirebaseFirestore.instance
+                          .collection('products')
+                          .doc(productModel.productId)
+                          .update(newProductModel.toMap());
+
+                      EasyLoading.dismiss();
+                    },
+                    child: Text("Update"),
+                  )
                 ],
               ),
             ),

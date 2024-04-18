@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/category-dropdown_controller.dart';
+import '../controllers/is-sale-controller.dart';
 import 'add-products-screen.dart';
 import 'edit-product-screen.dart';
 import 'product-detail-screen.dart';
@@ -112,8 +113,12 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                         onTap: () {
                           final editProdouctCategory =
                               Get.put(CategoryDropDownController());
+                          final isSaleController = Get.put(IsSaleController());
                           editProdouctCategory
                               .setOldValue(productModel.categoryId);
+
+                          isSaleController
+                              .setIsSaleOldValue(productModel.isSale);
                           Get.to(() =>
                               EditProductScreen(productModel: productModel));
                         },
