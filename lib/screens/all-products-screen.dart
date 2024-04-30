@@ -4,10 +4,12 @@ import 'package:admin_panel/models/product-model.dart';
 import 'package:admin_panel/utils/constant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:get/get.dart';
-
 import '../controllers/category-dropdown_controller.dart';
 import '../controllers/is-sale-controller.dart';
 import 'add-products-screen.dart';
@@ -38,11 +40,11 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
         ],
         backgroundColor: AppConstant.appMainColor,
       ),
-      body: FutureBuilder(
-        future: FirebaseFirestore.instance
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
             .collection('products')
             // .orderBy('createdAt', descending: true)
-            .get(),
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Container(
@@ -70,7 +72,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
             return ListView.builder(
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
-              itemCount: 8,
+              itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final data = snapshot.data!.docs[index];
 
@@ -89,40 +91,80 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   updatedAt: data['updatedAt'],
                 );
 
-                return Card(
-                  elevation: 5,
-                  child: ListTile(
-                    onTap: () {
-                      Get.to(() => SingleProductDetailScreen(
-                          productModel: productModel));
-                    },
-                    leading: CircleAvatar(
-                      backgroundColor: AppConstant.appScendoryColor,
-                      backgroundImage: CachedNetworkImageProvider(
-                        productModel.productImages[0],
-                        errorListener: (err) {
-                          // Handle the error here
-                          print('Error loading image');
-                          Icon(Icons.error);
-                        },
-                      ),
-                    ),
-                    title: Text(productModel.productName),
-                    subtitle: Text(productModel.productId),
-                    trailing: GestureDetector(
-                        onTap: () {
-                          final editProdouctCategory =
-                              Get.put(CategoryDropDownController());
-                          final isSaleController = Get.put(IsSaleController());
-                          editProdouctCategory
-                              .setOldValue(productModel.categoryId);
+                return SwipeActionCell(
+                  key: ObjectKey(productModel.productId),
 
-                          isSaleController
-                              .setIsSaleOldValue(productModel.isSale);
-                          Get.to(() =>
-                              EditProductScreen(productModel: productModel));
+                  /// this key is necessary
+                  trailingActions: <SwipeAction>[
+                    SwipeAction(
+                        title: "Delete",
+                        onTap: (CompletionHandler handler) async {
+                          await Get.defaultDialog(
+                            title: "Delete Product",
+                            content: Text(
+                                "Are you sure you want to delete this product?"),
+                            textCancel: "Cancel",
+                            textConfirm: "Delete",
+                            contentPadding: EdgeInsets.all(10.0),
+                            confirmTextColor: Colors.white,
+                            onCancel: () {},
+                            onConfirm: () async {
+                              Get.back(); // Close the dialog
+                              EasyLoading.show(status: 'Please wait..');
+
+                              await deleteImagesFromFirebase(
+                                productModel.productImages,
+                              );
+
+                              await FirebaseFirestore.instance
+                                  .collection('products')
+                                  .doc(productModel.productId)
+                                  .delete();
+
+                              EasyLoading.dismiss();
+                            },
+                            buttonColor: Colors.red,
+                            cancelTextColor: Colors.black,
+                          );
                         },
-                        child: Icon(Icons.edit)),
+                        color: Colors.red),
+                  ],
+                  child: Card(
+                    elevation: 5,
+                    child: ListTile(
+                      onTap: () {
+                        Get.to(() => SingleProductDetailScreen(
+                            productModel: productModel));
+                      },
+                      leading: CircleAvatar(
+                        backgroundColor: AppConstant.appScendoryColor,
+                        backgroundImage: CachedNetworkImageProvider(
+                          productModel.productImages[0],
+                          errorListener: (err) {
+                            // Handle the error here
+                            print('Error loading image');
+                            Icon(Icons.error);
+                          },
+                        ),
+                      ),
+                      title: Text(productModel.productName),
+                      subtitle: Text(productModel.productId),
+                      trailing: GestureDetector(
+                          onTap: () {
+                            final editProdouctCategory =
+                                Get.put(CategoryDropDownController());
+                            final isSaleController =
+                                Get.put(IsSaleController());
+                            editProdouctCategory
+                                .setOldValue(productModel.categoryId);
+
+                            isSaleController
+                                .setIsSaleOldValue(productModel.isSale);
+                            Get.to(() =>
+                                EditProductScreen(productModel: productModel));
+                          },
+                          child: Icon(Icons.edit)),
+                    ),
                   ),
                 );
               },
@@ -133,5 +175,19 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
         },
       ),
     );
+  }
+
+  Future deleteImagesFromFirebase(List imagesUrls) async {
+    final FirebaseStorage storage = FirebaseStorage.instance;
+
+    for (String imageUrl in imagesUrls) {
+      try {
+        Reference reference = storage.refFromURL(imageUrl);
+
+        await reference.delete();
+      } catch (e) {
+        print("Error $e");
+      }
+    }
   }
 }
