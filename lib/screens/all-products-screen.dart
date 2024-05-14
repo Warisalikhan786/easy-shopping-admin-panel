@@ -43,7 +43,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('products')
-            // .orderBy('createdAt', descending: true)
+            .orderBy('createdAt', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {

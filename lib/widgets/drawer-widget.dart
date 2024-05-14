@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../screens/all-orders-screen.dart';
 import '../screens/all-products-screen.dart';
+import '../screens/all_categories_screen.dart';
 import '../screens/main-screen.dart';
 import '../utils/constant.dart';
 
@@ -191,11 +192,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 titleAlignment: ListTileTitleAlignment.center,
                 onTap: () async {
                   Get.back();
-                  EasyLoading.show(status: "Please wait");
 
-                  // Get.to(() => ContactScreen());
-                  await sendMessage();
-                  EasyLoading.dismiss();
+                  Get.to(() => AllCategoriesScreen());
                 },
                 title: Text(
                   'Categories',
@@ -277,18 +275,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 
   // send whatsapp message
-  static Future<void> sendMessage() async {
-    final phoneNumber = AppConstant.whatsAppNumber;
-    final message =
-        "Hello *${AppConstant.appMainName}*"; // Replace with your message
+  // static Future<void> sendMessage() async {
+  //   final phoneNumber = AppConstant.whatsAppNumber;
+  //   final message =
+  //       "Hello *${AppConstant.appMainName}*"; // Replace with your message
 
-    final url =
-        'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
+  //   final url =
+  //       'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}';
 
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 }
