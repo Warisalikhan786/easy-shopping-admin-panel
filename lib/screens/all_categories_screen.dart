@@ -1,17 +1,17 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:admin_panel/controllers/edit_category_controller.dart';
 import 'package:admin_panel/models/categories_model.dart';
 import 'package:admin_panel/utils/constant.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:get/get.dart';
-
 import 'add_category_screen.dart';
+import 'edit_category_screen.dart';
 
 class AllCategoriesScreen extends StatelessWidget {
   const AllCategoriesScreen({super.key});
@@ -96,16 +96,17 @@ class AllCategoriesScreen extends StatelessWidget {
                             onConfirm: () async {
                               Get.back(); // Close the dialog
                               EasyLoading.show(status: 'Please wait..');
+                              EditCategoryController editCategoryController =
+                                  Get.put(EditCategoryController(
+                                      categoriesModel: categoriesModel));
 
-                              // await deleteImagesFromFirebase(
-                              //   productModel.productImages,
-                              // );
+                              await editCategoryController
+                                  .deleteImagesFromStorage(
+                                      categoriesModel.categoryImg);
 
-                              // await FirebaseFirestore.instance
-                              //     .collection('products')
-                              //     .doc(productModel.productId)
-                              //     .delete();
-
+                              await editCategoryController
+                                  .deleteWholeCategoryFromFireStore(
+                                      categoriesModel.categoryId);
                               EasyLoading.dismiss();
                             },
                             buttonColor: Colors.red,
@@ -132,7 +133,11 @@ class AllCategoriesScreen extends StatelessWidget {
                       title: Text(categoriesModel.categoryName),
                       subtitle: Text(categoriesModel.categoryId),
                       trailing: GestureDetector(
-                          onTap: () {}, child: const Icon(Icons.edit)),
+                          onTap: () => Get.to(
+                                () => EditCategoryScreen(
+                                    categoriesModel: categoriesModel),
+                              ),
+                          child: const Icon(Icons.edit)),
                     ),
                   ),
                 );
