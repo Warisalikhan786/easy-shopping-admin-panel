@@ -2,9 +2,7 @@
 import 'package:admin_panel/screens/all-users-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../screens/all-orders-screen.dart';
 import '../screens/all-products-screen.dart';
 import '../screens/all_categories_screen.dart';

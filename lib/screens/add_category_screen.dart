@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_is_empty
+// ignore_for_file: prefer_is_empty, unnecessary_cast, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'dart:io';
 
@@ -32,7 +32,7 @@ class _AddCategoriesScreenState extends State<AddCategoriesScreen> {
         backgroundColor: AppConstant.appMainColor,
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Container(
           child: Column(
             children: [
@@ -136,18 +136,21 @@ class _AddCategoriesScreenState extends State<AddCategoriesScreen> {
                   await addProductImagesController.uploadFunction(
                       addProductImagesController.selectedIamges);
                   String categoryId = await GenerateIds().generateCategoryId();
+                  String cateImg = addProductImagesController.arrImagesUrl[0]
+                      .toString() as String;
+
+                  print(cateImg);
 
                   CategoriesModel categoriesModel = CategoriesModel(
                     categoryId: categoryId,
                     categoryName: categoryNameController.text.trim(),
-                    categoryImg:
-                        addProductImagesController.arrImagesUrl[0].toString(),
+                    categoryImg: cateImg,
                     createdAt: DateTime.now(),
                     updatedAt: DateTime.now(),
                   );
                   print(categoryId);
 
-                  //
+                  // //
                   FirebaseFirestore.instance
                       .collection('categories')
                       .doc(categoryId)
@@ -155,7 +158,7 @@ class _AddCategoriesScreenState extends State<AddCategoriesScreen> {
 
                   EasyLoading.dismiss();
                 },
-                child: Text("Save"),
+                child: const Text("Save"),
               )
             ],
           ),
