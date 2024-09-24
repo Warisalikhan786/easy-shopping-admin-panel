@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers
+// ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers, avoid_print
 
 import 'package:admin_panel/utils/constant.dart';
 import 'package:cached_network_image/cached_network_image.dart';

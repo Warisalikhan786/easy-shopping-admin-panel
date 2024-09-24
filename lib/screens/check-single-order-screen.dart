@@ -2,7 +2,6 @@
 
 import 'package:admin_panel/models/order-model.dart';
 import 'package:admin_panel/utils/constant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CheckSingleOrderScreen extends StatelessWidget {

@@ -125,7 +125,6 @@ class AllCategoriesScreen extends StatelessWidget {
                           categoriesModel.categoryImg.toString(),
                           errorListener: (err) {
                             // Handle the error here
-                            print('Error loading image');
                             const Icon(Icons.error);
                           },
                         ),

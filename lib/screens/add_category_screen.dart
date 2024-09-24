@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_is_empty, unnecessary_cast, avoid_unnecessary_containers, sized_box_for_whitespace
+// ignore_for_file: prefer_is_empty, unnecessary_cast, avoid_unnecessary_containers, sized_box_for_whitespace, avoid_print
 
 import 'dart:io';
 
@@ -135,7 +135,7 @@ class _AddCategoriesScreenState extends State<AddCategoriesScreen> {
                   EasyLoading.show();
                   await addProductImagesController.uploadFunction(
                       addProductImagesController.selectedIamges);
-                  String categoryId = await GenerateIds().generateCategoryId();
+                  String categoryId = GenerateIds().generateCategoryId();
                   String cateImg = addProductImagesController.arrImagesUrl[0]
                       .toString() as String;
 
